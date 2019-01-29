@@ -1,3 +1,15 @@
+const fs = require('fs');
+
+
+// base64 encode CODE_OF_CONDUCT and CONTRIBUTING 
+const code_of_conduct = Buffer.from(fs.readFileSync('CODE_OF_CONDUCT.md', 'utf-8')).toString('base64');
+const contributing = Buffer.from(fs.readFileSync('CONTRIBUTING.md', 'utf-8')).toString('base64');
+const pr_template = Buffer.from(fs.readFileSync('PULL_REQUEST_TEMPLATE.md', 'utf-8')).toString('base64');
+const issue_template = Buffer.from(fs.readFileSync('ISSUE_TEMPLATE.md', 'utf-8')).toString('base64');
+
+
+
+// exports
 module.exports = app => {
 
   app.log('The Rusty Git loaded successfully!');
@@ -20,7 +32,45 @@ module.exports = app => {
     return context.github.issues.createComment(issueComment);
   });
 
+  // repository.created event
+  app.on('repository.created', async context => {
 
+    // add contributing guidelines
+    context.github.repos.createFile({
+      owner: context.payload.repository.owner.login, 
+      repo: context.payload.repository.name, 
+      path: 'CONTRIBUTING.md', 
+      message: 'Added contributing Guidelines', 
+      content: contributing
+    })
+
+    // add code of conduct
+    context.github.repos.createFile({
+      owner: context.payload.repository.owner.login, 
+      repo: context.payload.repository.name, 
+      path: 'CODE_OF_CONDUCT.md', 
+      message: 'Added code of conduct', 
+      content: code_of_conduct
+    })
+
+    // add ISSUE_TEMPLATE
+    context.github.repos.createFile({
+      owner: context.payload.repository.owner.login, 
+      repo: context.payload.repository.name, 
+      path: 'ISSUE_TEMPLATE.md', 
+      message: 'Added issue template', 
+      content: issue_template
+    })
+
+    // add code of conduct
+    context.github.repos.createFile({
+      owner: context.payload.repository.owner.login, 
+      repo: context.payload.repository.name, 
+      path: 'PULL_REQUEST_TEMPLATE.md', 
+      message: 'Added PR template', 
+      content: pr_template
+    })
+  })
 
 
 }
@@ -62,8 +112,8 @@ const mergePull = (context, app) => {
 
 
 
-  // For more information on building apps:
-  // https://probot.github.io/docs/
+// For more information on building apps:
+// https://probot.github.io/docs/
 
-  // To get your app running against GitHub, see:
-  // https://probot.github.io/docs/development/
+// To get your app running against GitHub, see:
+// https://probot.github.io/docs/development/
