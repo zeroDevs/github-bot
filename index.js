@@ -19,17 +19,17 @@ checkMembership = (context, app) => {
   const details = { username: context.payload.pull_request.user.login, org: context.payload.organization.login};
   const time = context.payload.pull_request.created_at;
   context.github.orgs.getMembership(details)
-    .then(res => createLog(time, `${res.data.user.login}'s membership is: ${res.data.state}, holding the role: ${res.data.role}`))
+    .then(res => createLog(time, `${res.data.user.login}'s membership is: ${res.data.state}, holding the role: ${res.data.role}`, app))
   
     .catch((err) => {
-      createLog(time, `Sent an invitation to ${details.username}!`)
+      createLog(time, `Sent an invitation to ${details.username}!`, app)
       context.github.orgs.addOrUpdateMembership(details);
       const issueComment = context.issue({ body: 'Congrats on making your first Pull Request in the Zero To Mastery Organization! You have been sent an invitation to join the organization, please check your emails' });
       return context.github.issues.createComment(issueComment);
     });
 }
 
-createLog = (time, message) => {
+createLog = (time, message, app) => {
   // Log to heroku console
   app.log.error(message);
 
