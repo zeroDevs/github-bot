@@ -34,7 +34,7 @@ createLog = (time, message, app) => {
   app.log.error(message);
 
   // Log to text file
-  const dateTime = `[${time.slice(0, time.indexOf("T"))}] [${time.slice(time.indexOf("T"))}]`;
+  const dateTime = `[${time.slice(0, time.indexOf("T"))}] [${time.slice((time.indexOf("T") + 1))}] - `;
   const text = dateTime + message + '\r\n';
 
   fs.appendFile('log.txt', text, function (err) {
