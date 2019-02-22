@@ -1,3 +1,5 @@
+const fs = require('fs')
+
 // exports
 module.exports = app => {
 
@@ -25,10 +27,8 @@ module.exports = app => {
 const sendInvite = (context, app) => {
   const details = { username: context.payload.pull_request.user.login, org: context.payload.organization.login, time: context.payload.pull_request.created_at };
   context.github.orgs.getMembership(details)
-    .then(res => {
-      app.log.error(`${res.data.user.login}'s membership is: ${res.data.state}, holding the role: ${res.data.role}`)
-      saveLog(details.time, `${res.data.user.login}'s membership is: ${res.data.state}, holding the role: ${res.data.role}`)
-    })
+    .then(res => app.log.error(`${res.data.user.login}'s membership is: ${res.data.state}, holding the role: ${res.data.role}`))
+    .then(saveLog(details.time, `${res.data.user.login}'s membership is: ${res.data.state}, holding the role: ${res.data.role}`))
     .catch((err) => {
       app.log.warn(`${details.username} is not a member, lets send them an invite!`)
       saveLog(details.time, `${details.username} is not a member, lets send them an invite!`)
