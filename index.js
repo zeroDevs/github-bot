@@ -16,7 +16,7 @@ const sendInvite = (context, app) => {
     .then(res => app.log.error(
       `${res.data.user.login}'s membership is: ${res.data.state}, holding the role: ${res.data.role}`))
     .catch((err) => {
-      app.log.warn(`${res.data.user.login} is not a member, lets send them an invite!`)
+      app.log.warn(`${details.user} is not a member, lets send them an invite!`)
       context.github.orgs.addOrUpdateMembership(details);
       const issueComment = context.issue({ body: 'Congrats on making your first Pull Request in the Zero To Mastery Organization! You have been sent an invitation to join the organization, please check your emails' });
       return context.github.issues.createComment(issueComment);
