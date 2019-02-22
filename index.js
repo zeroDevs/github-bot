@@ -18,6 +18,8 @@ const sendInvite = (context, app) => {
     .catch((err) => {
       app.log.warn(`${res.data.user.login} is not a member, lets send them an invite!`)
       context.github.orgs.addOrUpdateMembership(details);
+      const issueComment = context.issue({ body: 'Congrats on making your first Pull Request in the Zero To Mastery Organization! You have been sent an invitation to join the organization, please check your emails' });
+      return context.github.issues.createComment(issueComment);
     });
 }
 
