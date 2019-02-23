@@ -4,8 +4,8 @@ const fs = require('fs')
 module.exports = app => {
 
   app.on('pull_request', async context => {
-    console.log(context)
-    checkMembership(context, app)
+    console.log(context.payload.action)
+    if(context.payload.action === "opened") checkMembership(context, app)
   });
 
   // Create a log endpoint
