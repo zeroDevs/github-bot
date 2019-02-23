@@ -4,6 +4,7 @@ const fs = require('fs')
 module.exports = app => {
 
   app.on('pull_request', async context => {
+    console.log(context)
     checkMembership(context, app)
   });
 
